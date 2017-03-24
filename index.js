@@ -79,10 +79,14 @@ app.post('/webhook/', function (req, res) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         if (event.message) {
-            saymyname(sender)
+            justsaysomething(sender)
         }
+
         if (event.message && event.message.text) {
             text = event.message.text
+            if (text === "xxx") {
+                say_reverse(sender)
+            }
             input = text
             translate({
                 text: input,
@@ -160,3 +164,48 @@ function sendTranslation(sender, input) {
     })
 }
 
+function justsaysomething(sender) {
+    messageData = {
+        text: "i'm just saying something"
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: token },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            message: messageData,
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+
+
+}
+
+function say_reverse(sender) {
+    messageData = {
+        text: "reversing"
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: token },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            message: messageData,
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+
+
+}
