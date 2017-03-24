@@ -82,7 +82,16 @@ app.post('/webhook/', function (req, res) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         if (event.message && event.message.text) {
+            justsaysomething()
             text = event.message.text
+            translate({
+                text: text,
+                source: source,
+                target: target
+            }, function (result) {
+                console.log(result);
+                final = String(result);
+            });
             if (text = "xx") {
                 temporary = source
                 source = target
@@ -90,14 +99,6 @@ app.post('/webhook/', function (req, res) {
                 reply_reversed(sender)
             }
             else{
-                translate({
-                    text: text,
-                    source: source,
-                    target: target
-                }, function (result) {
-                    console.log(result);
-                    final = String(result);
-                });
                 startprocess()
                 setTimeout(function () {
                     clearTimeout(start);
@@ -161,6 +162,31 @@ reply_reversed(sender){
             console.log('Error: ', response.body.error)
         }
     })
+
+
+}
+
+justsaysomething(){
+    messageData = {
+        text: "I'm just saying something"
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: token },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            message: messageData,
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+
+
 
 
 }
