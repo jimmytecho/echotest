@@ -85,6 +85,9 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text
             if (text === "xxx") {
                 say_reverse(sender)
+                temp = source
+                source = target
+                target = temp
 
             } else {
                 input = text
