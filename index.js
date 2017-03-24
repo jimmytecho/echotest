@@ -103,8 +103,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-var token = "EAAaVxKEKRM4BAA0Sco3v9D8gYghtzqRehtYJ3zE0SYnOEVOtXbjDJzRqs4EbmLIRXnAxT8KRZA4vRZAI2cBE0joKkOOjiOZBwKu28XWTrWcRkulGWkzH5g4e5PUphZBddZBzeaKBZCGm9wpxrIfV8BZBWfX6cHwYZAvV7Ml42O0rCAZDZD"
-
+var token = "EAAalYrs1VC8BACEbr72Tj5G8GKMZBfeZAr4iSZCtVZCSVrEZCoKoEOaqZBEPKVF8ekzqmd79Nwp5TdZC8Ud0VaLRfPmWCQlnVvcG9IjUy0AVBh0eAGpxr96Ewq2ON3rB84OTYuaOKGa0saHHflIZC0pnO7g9pSbEvdJ3zLJPvBx7GUabcVn8oxxR"
 function startprocess() {
     start = setTimeout(function () {
         sendTranslation(sender, text.substring(0, 200));
