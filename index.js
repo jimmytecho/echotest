@@ -72,26 +72,26 @@ target: target...
 
 */
 
+source = 'en'
+target = 'fr'
+
 app.post('/webhook/', function (req, res) {
     
     messaging_events = req.body.entry[0].messaging
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        if (event.message) {
-            justsaysomething(sender)
-        }
-
         if (event.message && event.message.text) {
             text = event.message.text
             if (text === "xxx") {
                 say_reverse(sender)
+
             }
             input = text
             translate({
                 text: input,
-                source: 'en',
-                target: 'fr'
+                source: source,
+                target: target
             }, function (result) {
                 console.log(result);
                 final = String(result);
@@ -110,26 +110,7 @@ app.post('/webhook/', function (req, res) {
     res.sendStatus(200)
 })
 
-function saymyname(sender) {
-    messageData = {
-        text: sender
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: token },
-        method: 'POST',
-        json: {
-            recipient: { id: sender },
-            message: messageData,
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-}
+
 
 
 
