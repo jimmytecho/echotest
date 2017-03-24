@@ -82,7 +82,7 @@ app.post('/webhook/', function (req, res) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         if (event.message && event.message.text) {
-            justsaysomething()
+            justsaysomething(sender)
             text = event.message.text
             translate({
                 text: text,
@@ -166,7 +166,7 @@ reply_reversed(sender){
 
 }
 
-justsaysomething(){
+justsaysomething(sender){
     messageData = {
         text: "I'm just saying something"
     }
