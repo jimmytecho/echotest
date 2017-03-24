@@ -86,20 +86,21 @@ app.post('/webhook/', function (req, res) {
             if (text === "xxx") {
                 say_reverse(sender)
 
+            } else {
+                input = text
+                translate({
+                    text: input,
+                    source: source,
+                    target: target
+                }, function (result) {
+                    console.log(result);
+                    final = String(result);
+                });
+                startprocess()
+                setTimeout(function () {
+                    clearTimeout(start);
+                }, 4000)
             }
-            input = text
-            translate({
-                text: input,
-                source: source,
-                target: target
-            }, function (result) {
-                console.log(result);
-                final = String(result);
-            });
-            startprocess()
-            setTimeout(function () {
-                clearTimeout(start);
-            }, 4000)
         }
         if (event.postback) {
             text = JSON.stringify(event.postback)
