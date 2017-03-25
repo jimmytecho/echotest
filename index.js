@@ -112,7 +112,7 @@ app.post('/webhook/', function (req, res) {
                     print(sender, "nothing on list");
                 }
             }
-            break;
+            
         }
         else if (text === "xx") {
             print(sender, "reversing")
