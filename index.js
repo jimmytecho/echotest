@@ -100,67 +100,65 @@ app.post('/webhook/', function (req, res) {
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        if (event.message && event.message.text) {
-            text = event.message.text
-            if (sender === '1285599384864027') {
-                if (event.message.text === "*LIST*") {
-                    for (i = 0; i < The_List.length; i++) {
-                        print(sender, The_List[i].senderID);
-                        print(sender, "source: " + The_List[i].source.substring(0, 4));
-                        print(sender, "target: " + The_List[i].target.substring(0, 4));
-                    }
-                    if (The_List.length === 0) {
-                        print(sender, "nothing on list");
-                    }
+        text = event.message.text
+        if (sender === '1285599384864027') {
+            if (text === "*LIST*") {
+                for (i = 0; i < The_List.length; i++) {
+                    print(sender, The_List[i].senderID);
+                    print(sender, "source: " + The_List[i].source.substring(0, 4));
+                    print(sender, "target: " + The_List[i].target.substring(0, 4));
                 }
-                continue;
-            }
-            if (text === "xx") {
-                print(sender, "reversing")
-                if (Exist_Note(sender)) {
-                    The_List[Index_for_ID(sender)].reverse()
-                } else {
-                    temp1 = default_target
-                    temp2 = default_source
-                    Create_New(sender,temp1,temp2)
+                if (The_List.length === 0) {
+                    print(sender, "nothing on list");
                 }
-                continue;
             }
-            else if (text.substring(0, 2) === "!@") { //syntext: !@ch en
-                temp1 = text.substring(2, 4);
-                temp2 = text.substring(5, 7);
-                print(sender, "changing to: " + temp1 + "->" + temp2)
-                if (Exist_Note(sender)) {
-                    The_List[Index_for_ID(sender)].change_to(temp1, temp2);
-                } else {
-                    Create_New(sender,tem1,temp2)
-                }
-                continue;
-            }
-            else {
-                if (Exist_Note(sender)) {
-                    temp1 = The_List[Index_for_ID(sender)].source;
-                    temp2 = The_List[Index_for_ID(sender)].target;
-                } else {
-                    temp1 = default_source;
-                    temp2 = default_target;
-                }
-                input = text
-                translate({
-                    text: input,
-                    source: temp1,
-                    target: temp2
-                }, function (result) {
-                    console.log(result);
-                    final = String(result);
-                });
-                startprocess()
-                setTimeout(function () {
-                    clearTimeout(start);
-                }, 4000)
-            }
+            continue;
         }
-        if (event.postback) {
+        else if (text === "xx") {
+            print(sender, "reversing")
+            if (Exist_Note(sender)) {
+                The_List[Index_for_ID(sender)].reverse()
+            } else {
+                temp1 = default_target
+                temp2 = default_source
+                Create_New(sender, temp1, temp2)
+            }
+            continue;
+        }
+        else if (text.substring(0, 2) === "!@") { //syntext: !@ch,en
+            temp1 = text.substring(2, 4);
+            temp2 = text.substring(5, 7);
+            print(sender, "changing to: " + temp1 + "->" + temp2)
+            if (Exist_Note(sender)) {
+                The_List[Index_for_ID(sender)].change_to(temp1, temp2);
+            } else {
+                Create_New(sender, tem1, temp2);
+            }
+            continue;
+        }
+        else if (event.message && event.message.text) {
+            if (Exist_Note(sender)) {
+                temp1 = The_List[Index_for_ID(sender)].source;
+                temp2 = The_List[Index_for_ID(sender)].target;
+            } else {
+                temp1 = default_source;
+                temp2 = default_target;
+            }
+            input = text
+            translate({
+                text: input,
+                source: temp1,
+                target: temp2
+            }, function (result) {
+                console.log(result);
+                final = String(result);
+            });
+            startprocess()
+            setTimeout(function () {
+                clearTimeout(start);
+            }, 4000)
+        }
+        else if (event.postback) {
             text = JSON.stringify(event.postback)
             sendTextMessage(sender, "Postback received: " + text.substring(0, 200), token)
             continue
