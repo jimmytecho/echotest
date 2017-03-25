@@ -130,7 +130,7 @@ app.post('/webhook/', function (req, res) {
         else if (text.substring(0, 2) === "!@") { //syntext: !@ch,en
             temp1 = text.substring(2, 4);
             temp2 = text.substring(5, 7);
-            print(sender, "changing to: " + temp1 + "->" + temp2)
+            print(sender, "changing to: " + temp1 + " " + temp2);
             if (Exist_Note(sender)) {
                 The_List[Index_for_ID(sender)].change_to(temp1, temp2);
             } else {
