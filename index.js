@@ -103,9 +103,12 @@ app.post('/webhook/', function (req, res) {
         if (sender === '1285599384864027') {
             if (event.message.text === "*LIST*") {
                 for (i = 0; i < The_List.length; i++) {
-                    print(sender, The_List[i].senderID)
-                    print(sender, "source: " + The_List[i].source.substring(0,4))
-                    print(sender, "target: " + The_List[i].target.substring(0,4))
+                    print(sender, The_List[i].senderID);
+                    print(sender, "source: " + The_List[i].source.substring(0, 4));
+                    print(sender, "target: " + The_List[i].target.substring(0, 4));
+                }
+                if (The_List.length === 0) {
+                    print(sender, "nothing on list");
                 }
             }
         }
