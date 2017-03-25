@@ -72,8 +72,53 @@ target: target...
 
 */
 
-source = 'en'
-target = 'fr'
+var source = 'en'
+var target = 'fr'
+
+var The_List = new Array()
+
+
+class Note {
+    constructor(senderID, source, target) {
+        this.senderID = senderID
+        this.source = source
+        this.target = target
+    }
+    reverse() {
+        temp = this.source
+        this.source = this.target
+        this.taget = temp
+    }
+}
+function Has_setting(senderID) {
+    var isfound = false
+    var index
+    for (i = 0; i < The_List.length; i++) {
+        if (The_List[i].senderID === senderID) {
+            isfound = true
+        }
+        if (isfound) return true
+        else return false
+    }
+}
+function Index_for_ID(senderID) {
+    var isfound = false
+    var index
+    for (i = 0; i < The_List.length; i++) {
+        if (The_List[i].senderID === senderID) {
+            index = i
+            isfound = true
+        }
+        if (isfound) return index
+        else return -2
+    }
+}
+function Create_new(senderID, source, target) {
+    var Object = new Note(senderID, source,target)
+    The_List.push(Object)
+}
+
+
 
 app.post('/webhook/', function (req, res) {
     
@@ -85,6 +130,7 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text
             if (text === "xxx") {
                 say_reverse(sender)
+
                 temp = source
                 source = target
                 target = temp
