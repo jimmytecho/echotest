@@ -112,18 +112,20 @@ app.post('/webhook/', function (req, res) {
                     print(sender, "nothing on list");
                 }
             }
-            continue;
+            break;
         }
         else if (text === "xx") {
             print(sender, "reversing")
             if (Exist_Note(sender)) {
-                The_List[Index_for_ID(sender)].reverse()
+                The_List[Index_for_ID(sender)].reverse();
+                print(sender, "reversed")
             } else {
                 temp1 = default_target
                 temp2 = default_source
                 Create_New(sender, temp1, temp2)
+                print(sender, "recorded")
             }
-            continue;
+            break;
         }
         else if (text.substring(0, 2) === "!@") { //syntext: !@ch,en
             temp1 = text.substring(2, 4);
@@ -134,7 +136,7 @@ app.post('/webhook/', function (req, res) {
             } else {
                 Create_New(sender, tem1, temp2);
             }
-            continue;
+            break;
         }
         else if (event.message && event.message.text) {
             if (Exist_Note(sender)) {
