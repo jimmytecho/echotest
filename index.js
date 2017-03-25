@@ -101,20 +101,7 @@ app.post('/webhook/', function (req, res) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
         text = event.message.text
-        if (sender === '1285599384864027') {
-            if (text === "*LIST*") {
-                for (i = 0; i < The_List.length; i++) {
-                    print(sender, The_List[i].senderID);
-                    print(sender, "source: " + The_List[i].source.substring(0, 4));
-                    print(sender, "target: " + The_List[i].target.substring(0, 4));
-                }
-                if (The_List.length === 0) {
-                    print(sender, "nothing on list");
-                }
-            }
-            
-        }
-        else if (text === "xx") {
+        if (text === "xx") {
             print(sender, "reversing")
             if (Exist_Note(sender)) {
                 The_List[Index_for_ID(sender)].reverse();
@@ -140,7 +127,18 @@ app.post('/webhook/', function (req, res) {
         }
         else if (event.message && event.message.text) {
             text = event.message.text
-            if (Exist_Note(sender)) {
+            if (text === "*LIST*" && sender === '1285599384864027') {
+                for (i = 0; i < The_List.length; i++) {
+                    print(sender, The_List[i].senderID);
+                    print(sender, "source: " + The_List[i].source.substring(0, 4));
+                    print(sender, "target: " + The_List[i].target.substring(0, 4));
+                }
+                if (The_List.length === 0) {
+                    print(sender, "nothing on list");
+
+                }
+            }
+            else if (Exist_Note(sender)) {
                 temp1 = The_List[Index_for_ID(sender)].source;
                 temp2 = The_List[Index_for_ID(sender)].target;
             } else {
