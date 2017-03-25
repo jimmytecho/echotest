@@ -90,7 +90,7 @@ class Note {
         this.taget = temp
     }
 }
-function Has_setting(senderID) {
+function Exist_Note(senderID) {
     var isfound = false
     var index
     for (i = 0; i < The_List.length; i++) {
@@ -113,7 +113,7 @@ function Index_for_ID(senderID) {
         else return -2
     }
 }
-function Create_new(senderID, source, target) {
+function Create_New(senderID, source, target) {
     var Object = new Note(senderID, source,target)
     The_List.push(Object)
 }
@@ -130,10 +130,15 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text
             if (text === "xxx") {
                 say_reverse(sender)
-
-                temp = source
-                source = target
-                target = temp
+                if (Exist_Note) {
+                    The_List[Index_for_ID(sender)].reverse()
+                } else {
+                    temp = source
+                    source = target
+                    target = temp
+                    Create_New(sender,source,target)
+                }
+                
 
             } else {
                 input = text
