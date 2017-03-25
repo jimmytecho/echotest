@@ -130,7 +130,7 @@ app.post('/webhook/', function (req, res) {
             text = event.message.text
             if (text === "xxx") {
                 say_reverse(sender)
-                if (Exist_Note) {
+                if (Exist_Note(sender)) {
                     The_List[Index_for_ID(sender)].reverse()
                 } else {
                     temp = source
