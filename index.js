@@ -139,6 +139,7 @@ app.post('/webhook/', function (req, res) {
             break;
         }
         else if (event.message && event.message.text) {
+            text = event.message.text
             if (Exist_Note(sender)) {
                 temp1 = The_List[Index_for_ID(sender)].source;
                 temp2 = The_List[Index_for_ID(sender)].target;
@@ -146,7 +147,7 @@ app.post('/webhook/', function (req, res) {
                 temp1 = default_source;
                 temp2 = default_target;
             }
-            input = text
+            input = text.substring(0, 200);
             translate({
                 text: input,
                 source: temp1,
