@@ -124,6 +124,7 @@ app.post('/webhook/', function (req, res) {
                     temp2 = default_source
                     Create_New(sender,temp1,temp2)
                 }
+                continue;
             }
             else if (text.substring(0, 2) === "!@") { //syntext: !@ch en
                 temp1 = text.substring(3, 5);
@@ -134,6 +135,7 @@ app.post('/webhook/', function (req, res) {
                 } else {
                     Create_New(sender,tem1,temp2)
                 }
+                continue;
             }
             else {
                 if (Exist_Note(sender)) {
