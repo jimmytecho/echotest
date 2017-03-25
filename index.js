@@ -37,45 +37,14 @@ var input
 var final
 var start
 
-
-/*
-mission impossible: personalize settings. 
-curl -X GET "https://graph.facebook.com/v2.6/<USER_ID>?fields=first_name,last_name&access_token=PAGE_ACCESS_TOKEN"  
-·|¦^À³Json ¦r¦ê 
-"first_name" : "Peter"
-"last_name" : "Chang"
-
-*/
-
-/*
-possible solution
-use json!
-if (text === 'xxchangexx')
-record_setting(){
-    request person name?
-    write file: firstname last name, source, target
-}
-
-readID() = request id
-
-source = 'en'
-target = 'fr'
-if (name_recognized(first name last name)){
-    getIDbyname(first name last name)
-    source = ID.source
-    target = ID.target
-}
-translat
-source: source
-target: target...
-}
-
-*/
-
 var source = 'en'
 var target = 'fr'
 
 var The_List = new Array()
+
+var temp
+var temp1
+var temp2
 
 
 class Note {
@@ -89,6 +58,11 @@ class Note {
         this.source = this.target
         this.taget = temp
     }
+    change_to(new_source, new_target) {
+        this.source = new_source;
+        this.target = new_target;
+    }
+
 }
 function Exist_Note(senderID) {
     var isfound = false
@@ -114,8 +88,8 @@ function Index_for_ID(senderID) {
     }
 }
 function Create_New(senderID, source, target) {
-    var Object = new Note(senderID, source,target)
-    The_List.push(Object)
+    var Object = new Note(senderID, source, target);
+    The_List.push(Object);
 }
 
 
@@ -130,24 +104,33 @@ app.post('/webhook/', function (req, res) {
             if (event.message.text === "*LIST*") {
                 for (i = 0; i < The_List.length; i++) {
                     print(sender, The_List[i].senderID)
-                    print(sender, The_List[i].source)
-                    print(sender, The_List[i].target)
+                    print(sender, "source: " + The_List[i].source.substring(0,4))
+                    print(sender, "target: " + The_List[i].target.substring(0,4))
                 }
             }
         }
         if (event.message && event.message.text) {
             text = event.message.text
-            if (text === "xxx") {
-                say_reverse(sender)
+            if (text === "xx") {
+                print(sender, "reversing")
                 if (Exist_Note(sender)) {
                     The_List[Index_for_ID(sender)].reverse()
                 } else {
-                    temp1 = source
-                    temp2 = target
-                    Create_New(sender,temp2,temp1)
+                    temp1 = target
+                    temp2 = source
+                    Create_New(sender,temp1,temp2)
                 }
             }
-
+            else if (text.substring(0, 2) === "sw") { //syntext: sw:ch-en
+                temp1 = text.substring(3, 2);
+                temp2 = text.substring(6, 2);
+                print(sender, "changing to: " + temp1 + "->" + temp2)
+                if (Exist_Note(sender)) {
+                    The_List[Index_for_ID(sender)].change_to(temp1, temp2);
+                } else {
+                    Create_New(sender,tem1,temp2)
+                }
+            }
             else {
                 input = text
                 translate({
@@ -206,73 +189,6 @@ function sendTranslation(sender, input) {
             console.log('Error: ', response.body.error)
         }
     })
-}
-
-function justsaysomething(sender) {
-    messageData = {
-        text: "i'm just saying something"
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: token },
-        method: 'POST',
-        json: {
-            recipient: { id: sender },
-            message: messageData,
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-
-
-}
-
-function say_reverse(sender) {
-    messageData = {
-        text: "reversing"
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: token },
-        method: 'POST',
-        json: {
-            recipient: { id: sender },
-            message: messageData,
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-
-}
-
-function say_my_name(sender) {
-    messageData = {
-        text: sender
-    }
-    request({
-        url: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: token },
-        method: 'POST',
-        json: {
-            recipient: { id: sender },
-            message: messageData,
-        }
-    }, function (error, response, body) {
-        if (error) {
-            console.log('Error sending messages: ', error)
-        } else if (response.body.error) {
-            console.log('Error: ', response.body.error)
-        }
-    })
-
 }
 
 function print(sender, input) {
