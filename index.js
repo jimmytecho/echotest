@@ -126,6 +126,15 @@ app.post('/webhook/', function (req, res) {
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
+        if (sender === '1285599384864027') {
+            if (event.message.text === "*LIST*") {
+                for (i = 0; i < The_List.length; i++) {
+                    print(sender, The_List[i].senderID)
+                    print(sender, The_List[i].source)
+                    print(sender, The_List[i].target)
+                }
+            }
+        }
         if (event.message && event.message.text) {
             text = event.message.text
             if (text === "xxx") {
@@ -133,14 +142,13 @@ app.post('/webhook/', function (req, res) {
                 if (Exist_Note(sender)) {
                     The_List[Index_for_ID(sender)].reverse()
                 } else {
-                    temp = source
-                    source = target
-                    target = temp
-                    Create_New(sender,source,target)
+                    temp1 = source
+                    temp2 = target
+                    Create_New(sender,temp2,temp1)
                 }
-                
+            }
 
-            } else {
+            else {
                 input = text
                 translate({
                     text: input,
@@ -243,5 +251,48 @@ function say_reverse(sender) {
         }
     })
 
+}
+
+function say_my_name(sender) {
+    messageData = {
+        text: sender
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: token },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            message: messageData,
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
+
+}
+
+function print(sender, input) {
+    messageData = {
+        text: input
+    }
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: token },
+        method: 'POST',
+        json: {
+            recipient: { id: sender },
+            message: messageData,
+        }
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending messages: ', error)
+        } else if (response.body.error) {
+            console.log('Error: ', response.body.error)
+        }
+    })
 
 }
