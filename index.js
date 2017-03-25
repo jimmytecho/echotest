@@ -37,8 +37,8 @@ var input
 var final
 var start
 
-var source = 'en'
-var target = 'fr'
+var default_source = 'en'
+var default_target = 'fr'
 
 var The_List = new Array()
 
@@ -119,8 +119,8 @@ app.post('/webhook/', function (req, res) {
                 if (Exist_Note(sender)) {
                     The_List[Index_for_ID(sender)].reverse()
                 } else {
-                    temp1 = target
-                    temp2 = source
+                    temp1 = default_target
+                    temp2 = default_source
                     Create_New(sender,temp1,temp2)
                 }
             }
@@ -135,11 +135,18 @@ app.post('/webhook/', function (req, res) {
                 }
             }
             else {
+                if (Exist_Note(sender)) {
+                    temp1 = The_List[Index_for_ID(sender)].source;
+                    temp2 = The_List[Index_for_ID(sender)].target;
+                } else {
+                    temp1 = default_source;
+                    temp2 = default_target;
+                }
                 input = text
                 translate({
                     text: input,
-                    source: source,
-                    target: target
+                    source: temp1,
+                    target: temp2
                 }, function (result) {
                     console.log(result);
                     final = String(result);
