@@ -100,34 +100,33 @@ app.post('/webhook/', function (req, res) {
     for (i = 0; i < messaging_events.length; i++) {
         event = req.body.entry[0].messaging[i]
         sender = event.sender.id
-        text = event.message.text
-        if (text === "xx") {
-            print(sender, "reversing")
-            if (Exist_Note(sender)) {
-                The_List[Index_for_ID(sender)].reverse();
-                print(sender, "reversed")
-            } else {
-                temp1 = default_target
-                temp2 = default_source
-                Create_New(sender, temp1, temp2)
-                print(sender, "recorded")
-            }
-            break;
-        }
-        else if (text.substring(0, 2) === "!@") { //syntext: !@ch,en
-            temp1 = text.substring(2, 4);
-            temp2 = text.substring(5, 7);
-            print(sender, "changing to: " + temp1 + " " + temp2);
-            if (Exist_Note(sender)) {
-                The_List[Index_for_ID(sender)].change_to(temp1, temp2);
-            } else {
-                Create_New(sender, tem1, temp2);
-            }
-            break;
-        }
-        else if (event.message && event.message.text) {
+        if (event.message && event.message.text) {
             text = event.message.text
-            if (text === "*LIST*" && sender === '1285599384864027') {
+            if (text === "xx") {
+                print(sender, "reversing")
+                if (Exist_Note(sender)) {
+                    The_List[Index_for_ID(sender)].reverse();
+                    print(sender, "reversed")
+                } else {
+                    temp1 = default_target
+                    temp2 = default_source
+                    Create_New(sender, temp1, temp2)
+                    print(sender, "recorded")
+                }
+                break;
+            }
+            else if (text.substring(0, 2) === "!@") { //syntext: !@ch,en
+                temp1 = text.substring(2, 4);
+                temp2 = text.substring(5, 7);
+                print(sender, "changing to: " + temp1 + " " + temp2);
+                if (Exist_Note(sender)) {
+                    The_List[Index_for_ID(sender)].change_to(temp1, temp2);
+                } else {
+                    Create_New(sender, tem1, temp2);
+                }
+                break;
+            }
+            else if (text === "*LIST*" && sender === '1285599384864027') {
                 for (i = 0; i < The_List.length; i++) {
                     print(sender, The_List[i].senderID);
                     print(sender, "source: " + The_List[i].source.substring(0, 4));
@@ -138,26 +137,28 @@ app.post('/webhook/', function (req, res) {
 
                 }
             }
-            else if (Exist_Note(sender)) {
-                temp1 = The_List[Index_for_ID(sender)].source;
-                temp2 = The_List[Index_for_ID(sender)].target;
-            } else {
-                temp1 = default_source;
-                temp2 = default_target;
+            else {
+                if (Exist_Note(sender)) {
+                    temp1 = The_List[Index_for_ID(sender)].source;
+                    temp2 = The_List[Index_for_ID(sender)].target;
+                } else {
+                    temp1 = default_source;
+                    temp2 = default_target;
+                }
+                input = text.substring(0, 200);
+                translate({
+                    text: input,
+                    source: temp1,
+                    target: temp2
+                }, function (result) {
+                    console.log(result);
+                    final = String(result);
+                });
+                startprocess()
+                setTimeout(function () {
+                    clearTimeout(start);
+                }, 4000)
             }
-            input = text.substring(0, 200);
-            translate({
-                text: input,
-                source: temp1,
-                target: temp2
-            }, function (result) {
-                console.log(result);
-                final = String(result);
-            });
-            startprocess()
-            setTimeout(function () {
-                clearTimeout(start);
-            }, 4000)
         }
         else if (event.postback) {
             text = JSON.stringify(event.postback)
