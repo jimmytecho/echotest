@@ -97,8 +97,7 @@ function Create_New(senderID, source, target) {
 app.post('/webhook/', function (req, res) {
     
     messaging_events = req.body.entry[0].messaging
-    for (i = 0; i < messaging_events.length; i++) {
-        event = req.body.entry[0].messaging[i]
+        event = req.body.entry[0].messaging[0]
         sender = event.sender.id
         if (event.message && event.message.text) {
             text = event.message.text
@@ -126,7 +125,7 @@ app.post('/webhook/', function (req, res) {
                 }
                 break;
             }
-            else if (text === "*LIST*" && sender === '1285599384864027') {
+            else if (text === "*LIST*") {
                 for (i = 0; i < The_List.length; i++) {
                     print(sender, The_List[i].senderID);
                     print(sender, "source: " + The_List[i].source.substring(0, 4));
@@ -163,9 +162,7 @@ app.post('/webhook/', function (req, res) {
         else if (event.postback) {
             text = JSON.stringify(event.postback)
             sendTextMessage(sender, "Postback received: " + text.substring(0, 200), token)
-            continue
         }
-    }
     res.sendStatus(200)
 })
 
